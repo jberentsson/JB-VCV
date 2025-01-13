@@ -1,0 +1,25 @@
+{
+  "slug": "JB-VCV",
+  "name": "JB-VCV",
+  "version": "2.0.0",
+  "license": "GPL-3.0-or-later",
+  "brand": "JB-VCV",
+  "author": "J\u00f3hann Berentsson",
+  "authorEmail": "johann@berentsson.net",
+  "authorUrl": "berentsson.net",
+  "pluginUrl": "",
+  "manualUrl": "",
+  "sourceUrl": "",
+  "donateUrl": "",
+  "changelogUrl": "",
+  "modules": [
+    {
+      "slug": "PresettableCounter",
+      "name": "PresettableCounter",
+      "description": "Presettable counter.",
+      "tags": [
+        "counter"
+      ]
+    }
+  ]
+}
