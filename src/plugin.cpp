@@ -8,6 +8,7 @@ void init(Plugin* p) {
 	pluginInstance = p;
 
 	p->addModel(modelPresettableCounter);
+	p->addModel(model_8Steps);
 
 	// Add modules here
 	// p->addModel(modelMyModule);

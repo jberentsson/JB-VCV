@@ -7,6 +7,7 @@ using namespace rack;
 // Declare the Plugin, defined in plugin.cpp
 extern Plugin* pluginInstance;
 extern Model* modelPresettableCounter;
+extern Model* model_8Steps;
 
 
 // Declare each Model, defined in each module source file
@@ -16,6 +17,6 @@ template <typename TBase = GrayModuleLightWidget>
 struct YellowBlueLight : TBase {
 	YellowBlueLight() {
 		this->addBaseColor(SCHEME_YELLOW);
-		this->addBaseColor(SCHEME_BLUE);
+		//this->addBaseColor(SCHEME_BLUE);
 	}
 };

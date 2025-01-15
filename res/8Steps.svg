@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="600"
+   height="380"
+   viewBox="0 0 600 380"
+   version="1.1"
+   id="svg182"
+   sodipodi:docname="8Steps.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <metadata
+     id="metadata186">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1019"
+     id="namedview184"
+     showgrid="false"
+     inkscape:zoom="0.87830105"
+     inkscape:cx="178.18492"
+     inkscape:cy="175.90779"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg182"
+     inkscape:pagecheckerboard="0" />
+  <defs
+     id="defs9">
+    <style
+       id="style2">
+      .uuid-0c9ddb80-22bd-4a22-8528-962bf7b48397 {
+        fill: #f0f0f0;
+      }
+
+      .uuid-82085e52-8747-4a5d-ac9c-b736d173b8c5 {
+        fill: blue;
+      }
+
+      .uuid-fb4d19a9-8921-4cdf-a409-de517a192921 {
+        fill: url(#uuid-07aa4ee8-d7a8-48eb-968d-bdcabcc923ce);
+      }
+
+      .uuid-3326c89e-8368-4878-a4f1-ba037cb7c39f {
+        fill: lime;
+      }
+
+      .uuid-4dbed8ad-d2c5-4c8b-b620-9e35a1f53b04 {
+        fill: #f0f;
+      }
+
+      .uuid-117729c5-f8af-4d83-9483-da96eae0020f {
+        fill: #1f1f1f;
+      }
+
+      .uuid-414702a3-8dc8-4626-b985-e96dd05e709b {
+        fill: red;
+      }
+    </style>
+    <linearGradient
+       id="uuid-07aa4ee8-d7a8-48eb-968d-bdcabcc923ce"
+       x1="37.5"
+       y1="0"
+       x2="37.5"
+       y2="380"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#ebebeb"
+         id="stop4" />
+      <stop
+         offset="1"
+         stop-color="#e1e1e1"
+         id="stop6" />
+    </linearGradient>
+  </defs>
+  <g
+     id="uuid-a099f316-5bed-45ea-963a-5ecd9a314f68"
+     data-name="FND BG"
+     style="fill:#333333"
+     transform="scale(2,1)">
+    <rect
+       width="300"
+       height="380"
+       style="fill:#333333;stroke-width:2"
+       id="rect11"
+       x="0"
+       y="0" />
+  </g>
+  <g
+     id="uuid-cfaf5c6b-8abc-48ef-9dd3-816e6edbd046"
+     data-name="components"
+     style="display:none"
+     inkscape:groupmode="layer">
+    <circle
+       id="uuid-fb0b02d5-0424-4a99-a812-8a2c61568ad2"
+       data-name="CLOCK_LIGHT#TinyLight"
+       cx="32.5597"
+       cy="188.39954"
+       r="1.5"
+       style="fill:#ff00ff" />
+    <circle
+       id="uuid-fd86755a-bf60-40f8-91fd-7ae71a52fea3"
+       data-name="NotB#TinyLight"
+       cx="64.559898"
+       cy="188.39951"
+       r="1.5"
+       style="fill:#ff00ff" />
+    <circle
+       id="uuid-092d8efb-d659-4dee-ab48-61fe2a69c4c0"
+       data-name="Or#TinyLight"
+       cx="32.5597"
+       cy="233.28703"
+       r="1.5"
+       style="fill:#ff00ff" />
+    <circle
+       id="uuid-fa43382f-79cd-478a-a795-3c19935ffa66"
+       data-name="Nor#TinyLight"
+       cx="64.559898"
+       cy="233.287"
+       r="1.5"
+       style="fill:#ff00ff" />
+    <circle
+       id="uuid-c8c57001-4af3-4cc2-a99d-4be6bc4d8524"
+       data-name="And#TinyLight"
+       cx="32.5597"
+       cy="278.24713"
+       r="1.5"
+       style="fill:#ff00ff" />
+    <circle
+       id="uuid-4f60a204-6313-4465-a834-eee8e64c9dee"
+       data-name="Nand#TinyLight"
+       cx="64.559898"
+       cy="278.2471"
+       r="1.5"
+       style="fill:#ff00ff" />
+    <circle
+       id="uuid-fe818d36-ce0c-40fe-93aa-c6b9c261d541"
+       data-name="Xor#TinyLight"
+       cx="32.559719"
+       cy="323.01172"
+       r="1.5"
+       style="fill:#ff00ff" />
+    <circle
+       id="uuid-663df327-15ab-45df-bfe4-597ceb2f4def"
+       data-name="Xnor#TinyLight"
+       cx="64.559853"
+       cy="323.01172"
+       r="1.5"
+       style="fill:#ff00ff" />
+    <circle
+       id="uuid-115ffa28-ac3d-4f6e-bbea-3ca6cc29d7b6"
+       data-name="B#PJ301MPort"
+       cx="21.551001"
+       cy="154.45821"
+       r="5"
+       style="fill:#00ff00" />
+    <circle
+       id="uuid-b9e11c33-ca15-4ec9-8f90-fec50580250a"
+       data-name="B#PJ301MPort"
+       cx="53.551128"
+       cy="154.45821"
+       r="5"
+       style="fill:#00ff00" />
+    <circle
+       id="uuid-875e2950-5619-4941-9cd3-f6d29e31fa51"
+       data-name="NotA#PJ301MPort"
+       cx="21.545441"
+       cy="199.39957"
+       r="5"
+       style="fill:#0000ff" />
+    <circle
+       id="uuid-c0693d71-a037-4df2-973c-41ac0812848b"
+       data-name="NotB#PJ301MPort"
+       cx="53.54557"
+       cy="199.39957"
+       r="5"
+       style="fill:#0000ff" />
+    <circle
+       id="uuid-8b746299-247c-465c-8679-6eec5f28d54b"
+       data-name="Or#PJ301MPort"
+       cx="21.545441"
+       cy="244.28706"
+       r="5"
+       style="fill:#0000ff" />
+    <circle
+       id="uuid-6009b01d-b4e6-4018-88fe-53bdf8b0cdf2"
+       data-name="Nor#PJ301MPort"
+       cx="53.54557"
+       cy="244.28706"
+       r="5"
+       style="fill:#0000ff" />
+    <circle
+       id="uuid-7749e9d1-2fde-45cd-839d-eed8bcff3a24"
+       data-name="And#PJ301MPort"
+       cx="21.545441"
+       cy="289.2471"
+       r="5"
+       style="fill:#0000ff" />
+    <circle
+       id="uuid-a721cf26-967a-4096-9f96-3c559f80769d"
+       data-name="Nand#PJ301MPort"
+       cx="53.54557"
+       cy="289.2471"
+       r="5"
+       style="fill:#0000ff" />
+    <circle
+       id="uuid-07ce133b-45e8-47d4-8760-62f6884b661f"
+       data-name="Xor#PJ301MPort"
+       cx="21.545441"
+       cy="334"
+       r="5"
+       style="fill:#0000ff" />
+    <circle
+       id="uuid-e054d19e-a661-4b36-9f1f-4400e7c0c382"
+       data-name="Xnor#PJ301MPort"
+       cx="53.54557"
+       cy="334"
+       r="5"
+       style="fill:#0000ff" />
+    <circle
+       id="uuid-e8571d49-349b-4233-a51d-0230b55a5d9a"
+       data-name="Bpush#LargeLEDLightBezel"
+       cx="37.5"
+       cy="78.999901"
+       r="5"
+       style="fill:#ff0000" />
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:9.33333px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none"
+     x="299.93619"
+     y="17.965704"
+     id="text3752"><tspan
+       sodipodi:role="line"
+       id="tspan3750"
+       x="299.93619"
+       y="17.965704"
+       style="font-weight:bold;font-size:9.33333px;text-align:center;text-anchor:middle">8 Steps</tspan></text>
+</svg>

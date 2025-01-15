@@ -20,6 +20,14 @@
       "tags": [
         "counter"
       ]
+    },
+    {
+      "slug": "8Steps",
+      "name": "8Steps",
+      "description": "Eight step binary controlled sequencer.",
+      "tags": [
+        "sequencer"
+      ]
     }
   ]
 }
