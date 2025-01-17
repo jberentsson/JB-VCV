@@ -21,10 +21,6 @@ class Sequencer {
 	}
 
 	double getCurrentValue(int n){
-		if (length > n){
-			return NULL;
-		}
-
 		return cv[n];
 	}
 

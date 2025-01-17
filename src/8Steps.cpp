@@ -1,6 +1,14 @@
 #include "plugin.hpp"
 #include <iostream>
-#include "lib/StepSequencer.cpp"
+
+/*
+	TODO:
+	- Connect the step sequencer class to the panel for all four rows.
+	- Normalize the binary inputs.
+	- Make the LEDs change only on update.
+	- Finish the panel.
+	- Fix the output names.
+*/
 
 struct _8Steps : Module {
 	enum ParamId {
@@ -23,15 +31,11 @@ struct _8Steps : Module {
 	};
 
 	enum LightId {
-		ENUMS(STEP_LIGHT, 8),
+		ENUMS(STEP_LIGHT, 32),
 		LIGHTS_LEN
 	};
 
 	dsp::ClockDivider lightDivider;
-
-	int COUNTER = 0;
-	bool DISABLED = false;
-	int LAST_X = -1;
 
 	_8Steps() {
 		config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN, LIGHTS_LEN);
@@ -39,17 +43,17 @@ struct _8Steps : Module {
 		/* INPUTS */
 		std::string inputLabels[4] = {"Bit A", "Bit B", "Bit C", "Enable"};
 
-		for(int j = 0; j < 4; j++){
-			configInput(BIT_A_INPUT + j, inputLabels[j]);
-			configInput(BIT_B_INPUT + j, inputLabels[j]);
-			configInput(BIT_C_INPUT + j, inputLabels[j]);
-			configInput(ENABLE_INPUT + j, inputLabels[j]);
+		for(int i = 0; i < 4; i++){
+			configInput(BIT_A_INPUT + i, inputLabels[i]);
+			configInput(BIT_B_INPUT + i, inputLabels[i]);
+			configInput(BIT_C_INPUT + i, inputLabels[i]);
+			configInput(ENABLE_INPUT + i, inputLabels[i]);
 		}
 
 		/* CV */
-		for (int j = 0; j < 4; j++) {
-			for (int i = 0; i < 8; i++) {
-				configParam(CV_PARAMS + 8 * j + i, -10.f, 10.f, 0.f, string::f("CV %d step %d", j + 1, i + 1), " V");
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 8; j++) {
+				configParam(CV_PARAMS + 8 * i + j, -10.f, 10.f, 0.f, string::f("CV %d step %d", j + 1, i + 1), " V");
 			}
 		}
 
@@ -64,33 +68,58 @@ struct _8Steps : Module {
 	}
 
 	void process(const ProcessArgs& args) override {
-		float lightTime = args.sampleTime * lightDivider.getDivision();
-
 		/* INPUTS */
-		bool a = inputs[BIT_A_INPUT].getVoltage();
-		bool b = inputs[BIT_B_INPUT].getVoltage();
-		bool c = inputs[BIT_C_INPUT].getVoltage();
-		bool d = inputs[ENABLE_INPUT].getVoltage();
+		bool valuesRows[4][4] = {
+		{
+			inputs[BIT_A_INPUT + 0].getVoltage() && true,
+			inputs[BIT_B_INPUT + 0].getVoltage() && true,
+			inputs[BIT_C_INPUT + 0].getVoltage() && true,
+			inputs[ENABLE_INPUT + 0].getVoltage() && true
+		},{
+			inputs[BIT_A_INPUT + 1].getVoltage() && true,
+			inputs[BIT_B_INPUT + 1].getVoltage() && true,
+			inputs[BIT_C_INPUT + 1].getVoltage() && true,
+			inputs[ENABLE_INPUT + 1].getVoltage() && true
+		},{
+			inputs[BIT_A_INPUT + 2].getVoltage() && true,
+			inputs[BIT_B_INPUT + 2].getVoltage() && true,
+			inputs[BIT_C_INPUT + 2].getVoltage() && true,
+			inputs[ENABLE_INPUT + 2].getVoltage() && true
+		},{
+			inputs[BIT_A_INPUT + 3].getVoltage() && true,
+			inputs[BIT_B_INPUT + 3].getVoltage() && true,
+			inputs[BIT_C_INPUT + 3].getVoltage() && true,
+			inputs[ENABLE_INPUT + 3].getVoltage() && true
+		}};
 
-		int x = bits2dec(a, b, c, d);
+		int valueRows[4] = {
+			bits2dec(valuesRows[0][0], valuesRows[0][1], valuesRows[0][2], valuesRows[0][3]),
+			bits2dec(valuesRows[1][0], valuesRows[1][1], valuesRows[1][2], valuesRows[1][3]),
+			bits2dec(valuesRows[2][0], valuesRows[2][1], valuesRows[2][2], valuesRows[2][3]),
+			bits2dec(valuesRows[3][0], valuesRows[3][1], valuesRows[3][2], valuesRows[3][3])
+		};
 
-		if (!inputs[ENABLE_INPUT].isConnected()) {
-			d = !d;
+		for (int i = 0; i < 4; i++){
+			if (inputs[ENABLE_INPUT + i].isConnected() && true) {
+				valuesRows[i][3] = !valuesRows[i][3];
+			}
 		}
 
 		// Lights
-		for (int i = 0; i < 8; i++) {
-			if(i == x && d){
-				lights[STEP_LIGHT + x].setBrightness(true);
-			}else{
-				lights[STEP_LIGHT + i].setBrightness(false);
+		for (int i = 0; i < 4; i++){
+			for (int j = 0; j < 8; j++) {
+				if((j == valueRows[i])){
+					lights[STEP_LIGHT + ((8 * i) + j)].setBrightness(true);
+				}else{
+					lights[STEP_LIGHT + ((8 * i) + j)].setBrightness(false);
+				}
 			}
 		}
 		
-		outputs[CV_OUTPUTS + 0].setVoltage(params[CV_PARAMS + 8 * 0 + x].getValue());
-		outputs[CV_OUTPUTS + 1].setVoltage(params[CV_PARAMS + 8 * 1 + x].getValue());
-		outputs[CV_OUTPUTS + 2].setVoltage(params[CV_PARAMS + 8 * 2 + x].getValue());
-		outputs[CV_OUTPUTS + 3].setVoltage(params[CV_PARAMS + 8 * 3 + x].getValue());
+		outputs[CV_OUTPUTS + 0].setVoltage(params[CV_PARAMS + 8 * 0 + valueRows[0]].getValue());
+		outputs[CV_OUTPUTS + 1].setVoltage(params[CV_PARAMS + 8 * 1 + valueRows[1]].getValue());
+		outputs[CV_OUTPUTS + 2].setVoltage(params[CV_PARAMS + 8 * 2 + valueRows[2]].getValue());
+		outputs[CV_OUTPUTS + 3].setVoltage(params[CV_PARAMS + 8 * 3 + valueRows[3]].getValue());
 	}
 };
 
@@ -141,7 +170,7 @@ struct _8StepsWidget : ModuleWidget {
 		/* LIGHTS */
 		for(int i = 0; i < 4; i++){
 			for(int j = 0; j < 8; j++){
-				addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(21.864 + (20*j), 15.393 + (20 * i))), module, _8Steps::STEP_LIGHT + j));
+				addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(21.864 + (20*j), 15.393 + (20 * i))), module, _8Steps::STEP_LIGHT + ((8 * i) + j)));
 			}
 		}
 		

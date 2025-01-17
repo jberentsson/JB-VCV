@@ -2,6 +2,14 @@
 #include <iostream>
 #include "lib/counter.cpp"
 
+/*
+	TODO:
+	- Find out which triggers and gates can be removed.
+	- Finish the presets.
+	- Compare it to a real presettable counter.
+	- Finish the panel.
+*/
+
 struct PresettableCounter : Module {
 	enum ParamId {
 		PARAMS_LEN
