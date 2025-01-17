@@ -17,6 +17,5 @@ template <typename TBase = GrayModuleLightWidget>
 struct YellowBlueLight : TBase {
 	YellowBlueLight() {
 		this->addBaseColor(SCHEME_YELLOW);
-		//this->addBaseColor(SCHEME_BLUE);
 	}
 };

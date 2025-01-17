@@ -1,5 +1,6 @@
 #include "plugin.hpp"
 #include <iostream>
+#include "lib/counter.cpp"
 
 struct PresettableCounter : Module {
 	enum ParamId {
@@ -50,15 +51,16 @@ struct PresettableCounter : Module {
 	dsp::PulseGenerator directionPulse;
 	dsp::PulseGenerator enablePulse;
 
-	int index = 0;
-	bool statusReset = false;
-	bool statusClock = false;
-	bool statusPreset = false;
-	bool statusEnable = false;
-	bool statusDirection = false;
+	Counter pc;
+
+	bool enabledGate = true;
+	bool directionGate = false;
+	int n = 32;
 
 	PresettableCounter() {
 		config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN, LIGHTS_LEN);
+
+		pc.main(n);
 
 		/* INPUTS */
 		configInput(CLOCK_INPUT, "Clock");
@@ -69,6 +71,7 @@ struct PresettableCounter : Module {
 		
 		std::string PRESET_DESCRIPTIONS[4] = {"A bit", "B bit", "C bit", "D bit"};
 
+		/* PRESET INPUTS */
 		for (int i = 0; i < 4; i++) {
 			configInput(PRESET_INPUTS + i, PRESET_DESCRIPTIONS[i]);
 		}
@@ -81,157 +84,82 @@ struct PresettableCounter : Module {
 		configOutput(COUNTER_OUTPUTS_CARRY, "Carry");
 	}
 
-	void updateOutputs(int a, int b, int c, int d, int carry){
-		outputs[COUNTER_OUTPUTS_A].setVoltage(a);
-		outputs[COUNTER_OUTPUTS_B].setVoltage(b);
-		outputs[COUNTER_OUTPUTS_C].setVoltage(c);
-		outputs[COUNTER_OUTPUTS_D].setVoltage(d);
-		outputs[COUNTER_OUTPUTS_CARRY].setVoltage(carry);
-	}
-
-	void outputsOff(){
-		updateOutputs(0, 0, 0, 0, 0);
-	}
-
-	void reset(){
-		index = 0;
-		outputsOff();
-	}
-
-	bool getClockTrigger(){
-		return clockTrigger.process(inputs[CLOCK_INPUT].getVoltage(), 0.1f, 2.f);
-	}
-	bool getResetTrigger(){
-		return resetTrigger.process(inputs[RESET_INPUT].getVoltage(), 0.1f, 2.f);
-	}
-
-	bool getEnableTrigger(){
-		return enableTrigger.process(inputs[ENABLE_INPUT].getVoltage(), 0.1f, 2.f);
-	}
-
-	bool getPresetTrigger(){
-		return presetTrigger.process(inputs[PRESET_INPUT].getVoltage(), 0.1f, 2.f);
-	}
-
-	void intToOutput(int index ){
-		double OUTPUT_VALUES[5] = {
-			((index >> 0) & 0x1) * 10.0,
-			((index >> 1) & 0x1) * 10.0,
-			((index >> 2) & 0x1) * 10.0,
-			((index >> 3) & 0x1) * 10.0,
-			((index >> 4) & 0x1) * 10.0
-		};
-
-		// UPDATE THE OUTPUTS
-		outputs[COUNTER_OUTPUTS_A].setVoltage(OUTPUT_VALUES[0]);
-		outputs[COUNTER_OUTPUTS_B].setVoltage(OUTPUT_VALUES[1]);
-		outputs[COUNTER_OUTPUTS_C].setVoltage(OUTPUT_VALUES[2]);
-		outputs[COUNTER_OUTPUTS_D].setVoltage(OUTPUT_VALUES[3]);
-		outputs[COUNTER_OUTPUTS_CARRY].setVoltage(OUTPUT_VALUES[4]);
-	}
-
-	void updateInputs(){
-		/* DEBUG */
-		bool clockTriggered = clockTrigger.process(inputs[CLOCK_INPUT].getVoltage(), 0.1f, 2.f);
-		bool resetTriggered = resetTrigger.process(inputs[RESET_INPUT].getVoltage(), 0.1f, 2.f);
-		bool enableTriggered = enableTrigger.process(inputs[ENABLE_INPUT].getVoltage(), 0.1f, 2.f);
-		bool presetTriggered = presetTrigger.process(inputs[PRESET_INPUT].getVoltage(), 0.1f, 2.f);
-		bool directionTriggered = presetTrigger.process(inputs[DIRECTION_INPUT].getVoltage(), 0.1f, 2.f);;
-
-		if (statusClock != clockTriggered){
-			if (clockTriggered){
-				std::cout << "Clock Trigger" << std::endl;
-			}
-
-			statusClock = !statusClock;
-		}
-		
-		if (statusReset != resetTriggered){
-			if(resetTriggered){
-				std::cout << "Reset Trigger" << std::endl;
-			}
-
-			statusReset = !statusReset;
-		}
-		
-		if (statusEnable != enableTriggered){
-			if (enableTriggered){
-				std::cout << "Enable Trigger" << std::endl;
-			}
-
-			statusEnable = !statusEnable;
-		}
-		
-		if (statusPreset != presetTriggered){
-			if(presetTriggered){
-				std::cout << "Preset Trigger" << std::endl;
-			}
-
-			statusPreset = !statusPreset;
-		}
-		
-		if (statusDirection != directionTriggered){
-			if(presetTriggered){
-				std::cout << "Direction Trigger" << std::endl;
-			}
-
-			statusDirection = !statusDirection;
-		}
-
-		// Make true if no cable is connected to the enable input.
-		if (!inputs[ENABLE_INPUT].isConnected()){
-			statusEnable = true;
-		}
-	}
-
 	void process(const ProcessArgs& args) override {
-		bool currentClockTrigger = clockTrigger.process(inputs[CLOCK_INPUT].getVoltage(), 0.1f, 2.f);
-		bool currentResetTrigger = resetTrigger.process(inputs[RESET_INPUT].getVoltage(), 0.1f, 2.f);
-		bool currentDirectionGate = directionTrigger.process(inputs[DIRECTION_INPUT].getVoltage(), 0.1f, 2.f);
+		/* ENABLE */
+		if (inputs[ENABLE_INPUT].isConnected()){
+			bool enableTriggered = enableTrigger.process(inputs[ENABLE_INPUT].getVoltage(), 0.1f, 2.f);
+			enabledGate = enableTrigger.isHigh();
+		} else {
+			enabledGate = true;
+		}
 
-		if (currentDirectionGate){
-			// Do something if direction is on.
-			if(currentDirectionGate != statusDirection){
-				if (currentDirectionGate){
-					//index--;
+		/* DIRECTION */
+		if (inputs[DIRECTION_INPUT].isConnected()){
+			bool currentDirectionGate = directionTrigger.process(inputs[DIRECTION_INPUT].getVoltage(), 0.1f, 2.f);
+			directionGate = directionTrigger.isHigh();
+		} else {
+			directionGate = false;
+		}
+
+		/* RESET */
+		if (inputs[RESET_INPUT].isConnected()){
+			bool currentResetTrigger = resetTrigger.process(inputs[RESET_INPUT].getVoltage(), 0.1f, 2.f);
+			if (currentResetTrigger) {
+				resetPulse.trigger(1e-3f);
+				
+				if (directionGate){
+					pc.setIndex(n-1);
 				} else {
-					index++;
+					pc.setIndex(0);
 				}
 			}
 		}
 
-		if (currentResetTrigger) {
-			if (statusReset != currentResetTrigger){
-				index = 0;
-			}
-		}
-
-		if (currentClockTrigger){
-			if (statusClock != currentClockTrigger) {
-				double OUTPUT_VALUES[5] = {
-					((index >> 0) & 0x1) * 10.0,
-					((index >> 1) & 0x1) * 10.0,
-					((index >> 2) & 0x1) * 10.0,
-					((index >> 3) & 0x1) * 10.0,
-					((index >> 4) & 0x1) * 10.0
-				};
-
-				// UPDATE THE OUTPUTS
-				outputs[COUNTER_OUTPUTS_A].setVoltage(OUTPUT_VALUES[0]);
-				outputs[COUNTER_OUTPUTS_B].setVoltage(OUTPUT_VALUES[1]);
-				outputs[COUNTER_OUTPUTS_C].setVoltage(OUTPUT_VALUES[2]);
-				outputs[COUNTER_OUTPUTS_D].setVoltage(OUTPUT_VALUES[3]);
-				outputs[COUNTER_OUTPUTS_CARRY].setVoltage(OUTPUT_VALUES[4]);
-
-				if (!statusDirection){
-					index++;
-				} else {
-					index--;
+		/* PRESET */
+		if (inputs[PRESET_INPUT].isConnected()){
+			int presetValue = 0;
+			for(int i = 0; i < 4; i++){
+				if (inputs[PRESET_INPUTS + i].getVoltage() && true){
+					presetValue += (2^n);
 				}
 			}
+			
+			bool currentPresetTrigger = presetTrigger.process(inputs[PRESET_INPUT].getVoltage(), 0.1f, 2.f);
+			if (currentPresetTrigger) {
+				presetPulse.trigger(1e-3f);
+				pc.setIndex(presetValue);
+			}
 		}
 
-		updateInputs();
+		bool resetGate = resetPulse.process(args.sampleTime);
+
+		/* CLOCK */
+		bool clockTriggered = clockTrigger.process(inputs[CLOCK_INPUT].getVoltage(), 0.1f, 2.f);
+		bool clockGate = false;
+		double OUTPUT_VALUES[5] = {0};
+
+		if (clockTriggered && !resetGate && enabledGate){
+			clockGate = clockTrigger.isHigh();
+
+			// Check in what direction we are going.
+			if (directionGate && inputs[DIRECTION_INPUT].isConnected()){
+				pc.decrement();
+			} else {
+				pc.increment();
+			}
+		}
+
+		// 
+		for(int i = 0; i < 5; i++){
+			OUTPUT_VALUES[i] = ((pc.index() >> i) & 0x1) * 10.0;
+		}
+
+		/* OUTPUTS */
+		outputs[COUNTER_OUTPUTS_A].setVoltage(enabledGate ? OUTPUT_VALUES[0] : 0);
+		outputs[COUNTER_OUTPUTS_B].setVoltage(enabledGate ? OUTPUT_VALUES[1] : 0);
+		outputs[COUNTER_OUTPUTS_C].setVoltage(enabledGate ? OUTPUT_VALUES[2] : 0);
+		outputs[COUNTER_OUTPUTS_D].setVoltage(enabledGate ? OUTPUT_VALUES[3] : 0);
+		outputs[COUNTER_OUTPUTS_CARRY].setVoltage(enabledGate ? OUTPUT_VALUES[4] : 0);
 	}
 };
 
@@ -249,11 +177,14 @@ struct PresettableCounterWidget : ModuleWidget {
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
 		/* INPUTS */
+
+		/* PRESET INPUTS */
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.299, 12.31)), module, PresettableCounter::PRESET_INPUTS + 0));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.299, 27.31)), module, PresettableCounter::PRESET_INPUTS + 1));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.299, 37.31)), module, PresettableCounter::PRESET_INPUTS + 2));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.299, 47.31)), module, PresettableCounter::PRESET_INPUTS + 3));
 		
+		/* CONTROL INPUTS*/
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.299, 57.31)), module, PresettableCounter::PRESET_INPUT));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.299, 67.31)), module, PresettableCounter::RESET_INPUT));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.299, 77.31)), module, PresettableCounter::CLOCK_INPUT));
