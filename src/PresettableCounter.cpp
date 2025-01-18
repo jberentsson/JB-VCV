@@ -1,3 +1,11 @@
+/*
+	PresettableCounter
+	Presettable Up/Down Binary Counter
+
+	Jóhann Berentsson
+	January 2025
+*/
+
 #include "plugin.hpp"
 #include <iostream>
 #include "lib/counter.cpp"
@@ -123,23 +131,29 @@ struct PresettableCounter : Module {
 			}
 		}
 
+		bool resetGate = resetPulse.process(args.sampleTime);
+
 		/* PRESET */
+		int presetValue = -1;
+		bool presetGate = false;
+		
 		if (inputs[PRESET_INPUT].isConnected()){
-			int presetValue = 0;
-			for(int i = 0; i < 4; i++){
-				if (inputs[PRESET_INPUTS + i].getVoltage() && true){
-					presetValue += (2^n);
-				}
-			}
 			
 			bool currentPresetTrigger = presetTrigger.process(inputs[PRESET_INPUT].getVoltage(), 0.1f, 2.f);
 			if (currentPresetTrigger) {
+				presetValue = 0;
+				for(int i = 0; i < 4; i++){
+					if (inputs[PRESET_INPUTS + i].getVoltage() && true){
+						presetValue += (2^n);
+					}
+				}
+
 				presetPulse.trigger(1e-3f);
+				presetGate = presetTrigger.isHigh();
 				pc.setIndex(presetValue);
 			}
 		}
-
-		bool resetGate = resetPulse.process(args.sampleTime);
+		
 
 		/* CLOCK */
 		bool clockTriggered = clockTrigger.process(inputs[CLOCK_INPUT].getVoltage(), 0.1f, 2.f);
@@ -149,15 +163,22 @@ struct PresettableCounter : Module {
 		if (clockTriggered && !resetGate && enabledGate){
 			clockGate = clockTrigger.isHigh();
 
-			// Check in what direction we are going.
-			if (directionGate && inputs[DIRECTION_INPUT].isConnected()){
-				pc.decrement();
+			if ((presetValue == -1) && !presetGate){
+				// Check in what direction we are going.
+				if (directionGate && inputs[DIRECTION_INPUT].isConnected()){
+					pc.decrement();
+				} else {
+					pc.increment();
+				}
+				//std::cout << "Preset: " << presetValue << std::endl;
+				//std::cout << "PresetGate: " << presetGate << std::endl;
 			} else {
-				pc.increment();
+				pc.setIndex(presetValue);
+				std::cout << "Preset: " << presetValue << std::endl;
 			}
 		}
 
-		// 
+		// Set the bit outputs.
 		for(int i = 0; i < 5; i++){
 			OUTPUT_VALUES[i] = ((pc.index() >> i) & 0x1) * 10.0;
 		}
