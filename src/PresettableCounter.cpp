@@ -61,11 +61,8 @@ struct PresettableCounter : Module {
 	dsp::SchmittTrigger directionTrigger;
 	dsp::SchmittTrigger enableTrigger;
 
-	dsp::PulseGenerator clockPulse;
 	dsp::PulseGenerator resetPulse;
 	dsp::PulseGenerator presetPulse;
-	dsp::PulseGenerator directionPulse;
-	dsp::PulseGenerator enablePulse;
 
 	Counter pc;
 

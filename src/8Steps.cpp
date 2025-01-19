@@ -96,22 +96,22 @@ struct _8Steps : Module {
 				inputs[BIT_A_INPUT + 0].getVoltage() && true,
 				inputs[BIT_B_INPUT + 0].getVoltage() && true,
 				inputs[BIT_C_INPUT + 0].getVoltage() && true,
-				inputs[ENABLE_INPUT + 0].getVoltage() && true
+				true
 			},{
 				inputs[BIT_A_INPUT + 1].getVoltage() && true,
 				inputs[BIT_B_INPUT + 1].getVoltage() && true,
 				inputs[BIT_C_INPUT + 1].getVoltage() && true,
-				inputs[ENABLE_INPUT + 1].getVoltage() && true
+				true
 			},{
 				inputs[BIT_A_INPUT + 2].getVoltage() && true,
 				inputs[BIT_B_INPUT + 2].getVoltage() && true,
 				inputs[BIT_C_INPUT + 2].getVoltage() && true,
-				inputs[ENABLE_INPUT + 2].getVoltage() && true
+				true
 			},{
 				inputs[BIT_A_INPUT + 3].getVoltage() && true,
 				inputs[BIT_B_INPUT + 3].getVoltage() && true,
 				inputs[BIT_C_INPUT + 3].getVoltage() && true,
-				inputs[ENABLE_INPUT + 3].getVoltage() && true
+				true
 			}
 		};
 
@@ -126,7 +126,6 @@ struct _8Steps : Module {
 					valuesRows[i][0] = valuesRows[i-1][0];
 				}
 			}
-
 			/* BIT B */
 			if (!inputs[BIT_B_INPUT + i].isConnected()){
 				if (i == 0){
@@ -152,11 +151,15 @@ struct _8Steps : Module {
 				} else {
 					valuesRows[i][3] = valuesRows[i-1][3];
 				}
+			} else {
+				valuesRows[i][3] = inputs[ENABLE_INPUT + i].getVoltage() && true;
 			}
 
-			/* BITS TO INT*/
+			/* BITS TO INT */
 			valueRows[i] = bits2dec(valuesRows[i][0], valuesRows[i][1], valuesRows[i][2]);
+		}
 
+		for (int i = 0; i < 4; i++){
 			/* LIGHTS */
 			if(valueRows[i] != oldIndex[i]){
 				updateLights(i, valueRows[i], valuesRows[i][3]);
@@ -164,6 +167,7 @@ struct _8Steps : Module {
 			}
 		}
 
+		/* CV OUTPUTS */
 		outputs[CV_OUTPUTS + 0].setVoltage(params[CV_PARAMS + 8 * 0 + valueRows[0]].getValue() * (valuesRows[0][3]));
 		outputs[CV_OUTPUTS + 1].setVoltage(params[CV_PARAMS + 8 * 1 + valueRows[1]].getValue() * (valuesRows[1][3]));
 		outputs[CV_OUTPUTS + 2].setVoltage(params[CV_PARAMS + 8 * 2 + valueRows[2]].getValue() * (valuesRows[2][3]));
