@@ -8,6 +8,7 @@ using namespace rack;
 extern Plugin* pluginInstance;
 extern Model* modelPresettableCounter;
 extern Model* model_8Steps;
+extern Model* modelBinaryCounter;
 
 
 // Declare each Model, defined in each module source file

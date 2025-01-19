@@ -28,6 +28,14 @@
       "tags": [
         "sequencer"
       ]
+    },
+    {
+      "slug": "BinaryCounter",
+      "name": "BinaryCounter",
+      "description": "An eight step binary counter.",
+      "tags": [
+        "counter"
+      ]
     }
   ]
 }
