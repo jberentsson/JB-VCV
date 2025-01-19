@@ -10,6 +10,7 @@ void init(Plugin* p) {
 	p->addModel(modelPresettableCounter);
 	p->addModel(model_8Steps);
 	p->addModel(modelBinaryCounter);
+	p->addModel(modelBin2Oct);
 
 	// Add modules here
 	// p->addModel(modelMyModule);

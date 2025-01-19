@@ -36,6 +36,14 @@
       "tags": [
         "counter"
       ]
+    },
+    {
+      "slug": "Bin2Oct",
+      "name": "Bin2Oct",
+      "description": "Binary number to octal.",
+      "tags": [
+        "counter"
+      ]
     }
   ]
 }
