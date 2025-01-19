@@ -60,7 +60,9 @@ struct BinaryCounter : Module {
 			}
 		}
 
-		bool resetGate = resetPulse.process(args.sampleTime);		/* CLOCK */
+		bool resetGate = resetPulse.process(args.sampleTime);
+		
+		/* CLOCK */
 		bool clockTriggered = clockTrigger.process(inputs[CLOCK_INPUT].getVoltage(), 0.1f, 2.f);
 		bool clockGate = false;
 		double OUTPUT_VALUES[8] = {0};
@@ -70,10 +72,9 @@ struct BinaryCounter : Module {
 			pc.increment();
 		}
 
-		// Set the bit outputs.
+		/* OUTPUTS */
 		for(int i = 0; i < 8; i++){
 			OUTPUT_VALUES[i] = ((pc.index() >> i) & 0x1) * 10.0;
-			/* OUTPUTS */
 			outputs[COUNTER_OUTPUTS + i].setVoltage(OUTPUT_VALUES[i]);
 		}
 	}

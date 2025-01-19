@@ -167,11 +167,8 @@ struct PresettableCounter : Module {
 				} else {
 					pc.increment();
 				}
-				//std::cout << "Preset: " << presetValue << std::endl;
-				//std::cout << "PresetGate: " << presetGate << std::endl;
 			} else {
 				pc.setIndex(presetValue);
-				std::cout << "Preset: " << presetValue << std::endl;
 			}
 		}
 
