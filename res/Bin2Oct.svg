@@ -2,10 +2,10 @@
 <svg
    width="30mm"
    height="128.5mm"
-   viewBox="0 0 113.38583 485.66934"
+   viewBox="0 0 113.38582 485.66934"
    version="1.1"
    id="svg182"
-   sodipodi:docname="PresettableCounter.svg"
+   sodipodi:docname="Bin2Oct.svg"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -101,11 +101,11 @@
      id="uuid-a099f316-5bed-45ea-963a-5ecd9a314f68"
      data-name="FND BG"
      transform="scale(1.5118111,1.2780772)"
-     style="fill:#1a1a1a">
+     style="fill:#333333">
     <rect
        width="75"
        height="380"
-       style="fill:#1a1a1a"
+       style="fill:#333333"
        id="rect11"
        x="0"
        y="0" />
@@ -254,15 +254,5 @@
      style="font-style:normal;font-weight:normal;font-size:9.33333px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none"
      x="56.49012"
      y="17.965704"
-     id="text3752"><tspan
-       sodipodi:role="line"
-       id="tspan3750"
-       x="56.49012"
-       y="17.965704"
-       style="font-weight:bold;font-size:9.33333px;text-align:center;text-anchor:middle">Presettable</tspan><tspan
-       sodipodi:role="line"
-       x="56.49012"
-       y="29.632366"
-       id="tspan3754"
-       style="font-weight:bold;font-size:9.33333px;text-align:center;text-anchor:middle">Counter</tspan></text>
+     id="text3752">Bin2Oct</text>
 </svg>
