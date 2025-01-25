@@ -39,6 +39,7 @@ struct PresettableCounter : Module {
 		COUNTER_OUTPUTS_C,
 		COUNTER_OUTPUTS_D,
 		COUNTER_OUTPUTS_CARRY,
+		ENUMS(COUNTER_OUTPUTS, 5),
 		OUTPUTS_LEN
 	};
 
@@ -52,6 +53,7 @@ struct PresettableCounter : Module {
 		B_OUT_LIGHT,
 		C_OUT_LIGHT,
 		D_OUT_LIGHT,
+		ENUMS(OUTPUT_LIGHTS, 5),
 		LIGHTS_LEN
 	};
 	
@@ -178,11 +180,10 @@ struct PresettableCounter : Module {
 		}
 
 		/* OUTPUTS */
-		outputs[COUNTER_OUTPUTS_A].setVoltage(enabledGate ? OUTPUT_VALUES[0] : 0);
-		outputs[COUNTER_OUTPUTS_B].setVoltage(enabledGate ? OUTPUT_VALUES[1] : 0);
-		outputs[COUNTER_OUTPUTS_C].setVoltage(enabledGate ? OUTPUT_VALUES[2] : 0);
-		outputs[COUNTER_OUTPUTS_D].setVoltage(enabledGate ? OUTPUT_VALUES[3] : 0);
-		outputs[COUNTER_OUTPUTS_CARRY].setVoltage(enabledGate ? OUTPUT_VALUES[4] : 0);
+		for (int i = 0; i < 5; i++){
+			outputs[COUNTER_OUTPUTS + i].setVoltage(enabledGate ? OUTPUT_VALUES[i] : 0);
+			lights[OUTPUT_LIGHTS + i].setBrightness(enabledGate && OUTPUT_VALUES[i] ? true : false);
+		}
 	}
 };
 
@@ -215,21 +216,25 @@ struct PresettableCounterWidget : ModuleWidget {
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.299, 97.31)), module, PresettableCounter::ENABLE_INPUT));
 
 		/* OUTPUTS */
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 12.31)), module, PresettableCounter::COUNTER_OUTPUTS_A));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 27.53)), module, PresettableCounter::COUNTER_OUTPUTS_B));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 37.53)), module, PresettableCounter::COUNTER_OUTPUTS_C));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 47.53)), module, PresettableCounter::COUNTER_OUTPUTS_D));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 57.53)), module, PresettableCounter::COUNTER_OUTPUTS_CARRY));		
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 12.31)), module, PresettableCounter::COUNTER_OUTPUTS + 0));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 27.53)), module, PresettableCounter::COUNTER_OUTPUTS + 1));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 37.53)), module, PresettableCounter::COUNTER_OUTPUTS + 2));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 47.53)), module, PresettableCounter::COUNTER_OUTPUTS + 3));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 57.53)), module, PresettableCounter::COUNTER_OUTPUTS + 4));		
 
 		/* LIGHTS */
+		/*
 		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(11.027, 63.805)), module, PresettableCounter::CLOCK_LIGHT));
 		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(21.864, 63.805)), module, PresettableCounter::RESET_LIGHT));
 		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(11.027, 79.007)), module, PresettableCounter::ENABLE_LIGHT));
 		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(21.864, 79.007)), module, PresettableCounter::PRESET_LIGHT));
 		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(11.027, 94.233)), module, PresettableCounter::PRE_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(21.864, 94.233)), module, PresettableCounter::C_OUT_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(11.027, 109.393)), module, PresettableCounter::D_OUT_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(21.864, 109.393)), module, PresettableCounter::LIGHTS_LEN));
+		*/
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(23.864, 8.233)), module, PresettableCounter::OUTPUT_LIGHTS + 0));
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(23.864, 20.393)), module, PresettableCounter::OUTPUT_LIGHTS + 1));
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(23.864, 35.393)), module, PresettableCounter::OUTPUT_LIGHTS + 2));
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(23.864, 45.393)), module, PresettableCounter::OUTPUT_LIGHTS + 3));
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(23.864, 55.393)), module, PresettableCounter::OUTPUT_LIGHTS + 4));
 	}
 };
 

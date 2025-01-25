@@ -26,6 +26,7 @@ struct BinaryCounter : Module {
 	};
 
 	enum LightId {
+		ENUMS(OUTPUT_LIGHTS, 8),
 		LIGHTS_LEN
 	};
 
@@ -47,6 +48,7 @@ struct BinaryCounter : Module {
 
 		for(int i = 0; i < 8; i++){
 			configOutput(COUNTER_OUTPUTS + i, string::f("%d bit", i));
+			lights[OUTPUT_LIGHTS + i].setBrightness(false);
 		}
 	}
 	
@@ -76,6 +78,7 @@ struct BinaryCounter : Module {
 		for(int i = 0; i < 8; i++){
 			OUTPUT_VALUES[i] = ((pc.index() >> i) & 0x1) * 10.0;
 			outputs[COUNTER_OUTPUTS + i].setVoltage(OUTPUT_VALUES[i]);
+			lights[OUTPUT_LIGHTS + i].setBrightness(OUTPUT_VALUES[i] ? true : false);
 		}
 	}
 };
@@ -95,14 +98,24 @@ struct BinaryCounterWidget : ModuleWidget {
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.299, 22.31)), module, BinaryCounter::RESET_INPUT));
 
 		/* OUTPUTS */
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 12.31)), module, BinaryCounter::COUNTER_OUTPUTS + 0));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 22.31)), module, BinaryCounter::COUNTER_OUTPUTS + 1));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 32.31)), module, BinaryCounter::COUNTER_OUTPUTS + 2));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 42.31)), module, BinaryCounter::COUNTER_OUTPUTS + 3));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 52.31)), module, BinaryCounter::COUNTER_OUTPUTS + 4));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 62.31)), module, BinaryCounter::COUNTER_OUTPUTS + 5));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 72.31)), module, BinaryCounter::COUNTER_OUTPUTS + 6));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 82.31)), module, BinaryCounter::COUNTER_OUTPUTS + 7));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 10.00)), module, BinaryCounter::COUNTER_OUTPUTS + 0));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 25.00)), module, BinaryCounter::COUNTER_OUTPUTS + 1));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 40.00)), module, BinaryCounter::COUNTER_OUTPUTS + 2));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 55.00)), module, BinaryCounter::COUNTER_OUTPUTS + 3));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 70.00)), module, BinaryCounter::COUNTER_OUTPUTS + 4));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 85.00)), module, BinaryCounter::COUNTER_OUTPUTS + 5));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 100.00)), module, BinaryCounter::COUNTER_OUTPUTS + 6));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(18.134, 115.00)), module, BinaryCounter::COUNTER_OUTPUTS + 7));
+
+		/* LIGHTS */
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(20.86, 4.39)), module, BinaryCounter::OUTPUT_LIGHTS + 0));
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(20.86, 15.39)), module, BinaryCounter::OUTPUT_LIGHTS + 1));
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(20.86, 30.39)), module, BinaryCounter::OUTPUT_LIGHTS + 2));
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(20.86, 50.39)), module, BinaryCounter::OUTPUT_LIGHTS + 3));
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(20.86, 65.39)), module, BinaryCounter::OUTPUT_LIGHTS + 4));
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(20.86, 80.39)), module, BinaryCounter::OUTPUT_LIGHTS + 5));
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(20.86, 95.39)), module, BinaryCounter::OUTPUT_LIGHTS + 6));
+		addChild(createLightCentered<TinyLight<YellowBlueLight<>>>(mm2px(Vec(20.86, 110.39)), module, BinaryCounter::OUTPUT_LIGHTS + 7));
 	}
 };
 
