@@ -1,6 +1,6 @@
 # JB VCV Plugins
 
-![Build](https://github.com/qno/vcv-plugin-github-actions-example/workflows/Build%20VCV%20Rack%20Plugin/badge.svg)
+[![Build](https://github.com/jberentsson/JB-VCV/actions/workflows/build-plugin.yml/badge.svg)](https://github.com/jberentsson/JB-VCV/actions/workflows/build-plugin.yml)
 
 ## 8 Steps
 Eight step binary sequencer.
